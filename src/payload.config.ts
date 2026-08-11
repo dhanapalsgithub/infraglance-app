@@ -87,7 +87,7 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'your-default-secret-key',
   sharp,
   typescript: {
-    output: path.resolve(dirname, 'payload-types.ts'),
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
   jobs: {
     access: {
