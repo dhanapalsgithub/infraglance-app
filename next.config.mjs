@@ -15,13 +15,13 @@ const getServerUrl = () => {
 const NEXT_PUBLIC_SERVER_URL = getServerUrl()
 
 const nextConfig = {
-  // Vercel-ல் sharp சரியாகச் செயல்பட இது மிக அவசியமானது
+  // Vercel-ல் sharp மற்றும் db-postgres சரியாகச் செயல்பட இது அவசியமானது
   serverExternalPackages: ['sharp', '@payloadcms/db-postgres'],
 
-  // Vercel பில்டில் sharp பைல்களை கட்டாயம் சேர்க்க வேண்டும்
+  // Vercel பில்டில் sharp நேட்டிவ் பைல்கள் விடுபടாமல் இருக்க pnpm பாதையைச் சேர்த்தல்
   outputFileTracingIncludes: {
-    '/admin/**/*': ['./node_modules/.pnpm/sharp*/**/*'],
-    '/**/*': ['./node_modules/.pnpm/sharp*/**/*'],
+    '/admin/**/*': ['./node_modules/.pnpm/sharp*@*/node_modules/sharp/**/*'],
+    '/**/*': ['./node_modules/.pnpm/sharp*@*/node_modules/sharp/**/*'],
   },
 
   sassOptions: {
