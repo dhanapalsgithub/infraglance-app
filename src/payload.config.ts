@@ -4,7 +4,7 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
-// உங்களது புதிய மற்றும் பழைய கலெக்ஷன்கள் அனைத்தும் இங்கே இம்போர்ட் செய்யப்பட்டுள்ளன
+// கலெக்ஷன்கள் மற்றும் குளோபல் இம்போர்ட்டுகள்
 import { Inquiries } from './collections/Inquiries'
 import { Projects } from './collections/Projects'
 import { Categories } from './collections/Categories'
@@ -60,19 +60,28 @@ export default buildConfig({
   editor: defaultLexical,
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || 'postgres://postgres:dhana%40123@localhost:5432/InfraGlanceNew',
+      connectionString: process.env.DATABASE_URI || 'postgres://neondb_owner:npg_6WviBKYqMp2e@ep-solitary-frog-aybqjlyg-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
     },
+    // கிளவுட் டேட்டாபேஸில் அட்டவணைகளை தானாக உருவாக்க இது உதவும்
+    push: true,
   }),
-  // பிளக்கின்களுக்குத் தேவையான Pages, Posts கலெக்ஷன்களுடன் உங்கள் புதிய Inquiries மற்றும் Projects சேர்க்கப்பட்டுள்ளன
-  collections: [Inquiries, Projects, Pages, Posts, Media, Categories, Users,Clients,       // புதியது
-    Quotations],
-    globals: [
-    Settings, // புதிய Settings குளோபல் இங்கே சேர்க்கப்பட்டுள்ளது
+  collections: [
+    Inquiries, 
+    Projects, 
+    Pages, 
+    Posts, 
+    Media, 
+    Categories, 
+    Users, 
+    Clients, 
+    Quotations
+  ],
+  globals: [
+    Settings,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  
   plugins,
-  secret: process.env.PAYLOAD_SECRET,
+  secret: process.env.PAYLOAD_SECRET || 'your-default-secret-key',
   sharp,
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
