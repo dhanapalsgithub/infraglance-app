@@ -6,7 +6,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "cross-env PAYLOAD_DROP_DATABASE=false next build",
+    "build": "cross-env PAYLOAD_DROP_DATABASE=true next build",
     "postbuild": "next-sitemap --config next-sitemap.config.cjs",
     "dev": "next dev",
     "dev:prod": "pnpm build && pnpm start",
