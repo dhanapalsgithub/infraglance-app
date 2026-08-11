@@ -78,6 +78,8 @@ export default buildConfig({
   ],
   globals: [
     Settings,
+    Header,
+    Footer,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   plugins,
