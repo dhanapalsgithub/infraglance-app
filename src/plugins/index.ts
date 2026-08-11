@@ -10,22 +10,23 @@ import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
 
-import { Page, Post } from '@/payload-types'
+import { Inquiry, Project } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
 
-const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
-  return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
+// டைப்ஸ்கிரிப்ட் பிழை வராதவாறு name மற்றும் projectName இரண்டையும் சரிபார்க்கும் முறை
+const generateTitle: GenerateTitle<Inquiry | Project> = ({ doc }) => {
+  const title = doc && 'name' in doc ? doc.name : (doc && 'projectName' in doc ? doc.projectName : 'Client Portal')
+  return title ? `${title} | Client Portal` : 'Client Portal'
 }
 
-const generateURL: GenerateURL<Post | Page> = ({ doc }) => {
+const generateURL: GenerateURL<Inquiry | Project> = ({ doc }) => {
   const url = getServerSideURL()
-
-  return doc?.slug ? `${url}/${doc.slug}` : url
+  return doc?.id ? `${url}/projects/${doc.id}` : url
 }
 
 export const plugins: Plugin[] = [
   redirectsPlugin({
-    collections: ['pages', 'posts'],
+    collections: ['inquiries', 'projects'],
     overrides: {
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
@@ -47,7 +48,7 @@ export const plugins: Plugin[] = [
     },
   }),
   nestedDocsPlugin({
-    collections: ['categories'],
+    collections: [],
     generateURL: (docs) => docs.reduce((url, doc) => `${url}/${doc.slug}`, ''),
   }),
   seoPlugin({
@@ -81,7 +82,7 @@ export const plugins: Plugin[] = [
     },
   }),
   searchPlugin({
-    collections: ['posts'],
+    collections: ['projects'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
       fields: ({ defaultFields }) => {

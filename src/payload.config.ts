@@ -4,7 +4,13 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
+// உங்களது புதிய மற்றும் பழைய கலெக்ஷன்கள் அனைத்தும் இங்கே இம்போர்ட் செய்யப்பட்டுள்ளன
+import { Inquiries } from './collections/Inquiries'
+import { Projects } from './collections/Projects'
 import { Categories } from './collections/Categories'
+import { Clients } from './collections/Clients'
+import { Quotations } from './collections/Quotations'
+import { Settings } from './Globals/Settings'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
@@ -52,13 +58,17 @@ export default buildConfig({
     },
   },
   editor: defaultLexical,
-  // மாற்றப்பட்ட பகுதி: DATABASE_URI அல்லது நேரடியாக கனெக்ஷன் ஸ்டிரிங்கைப் பயன்படுத்துதல்
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || 'postgres://postgres:dhana%40123@localhost:5432/InfraGlanceNew',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  // பிளக்கின்களுக்குத் தேவையான Pages, Posts கலெக்ஷன்களுடன் உங்கள் புதிய Inquiries மற்றும் Projects சேர்க்கப்பட்டுள்ளன
+  collections: [Inquiries, Projects, Pages, Posts, Media, Categories, Users,Clients,       // புதியது
+    Quotations],
+    globals: [
+    Settings, // புதிய Settings குளோபல் இங்கே சேர்க்கப்பட்டுள்ளது
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,

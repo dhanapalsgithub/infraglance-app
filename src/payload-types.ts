@@ -67,11 +67,15 @@ export interface Config {
   };
   blocks: {};
   collections: {
+    inquiries: Inquiry;
+    projects: Project;
     pages: Page;
     posts: Post;
     media: Media;
     categories: Category;
     users: User;
+    clients: Client;
+    quotations: Quotation;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -89,11 +93,15 @@ export interface Config {
     };
   };
   collectionsSelect: {
+    inquiries: InquiriesSelect<false> | InquiriesSelect<true>;
+    projects: ProjectsSelect<false> | ProjectsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    clients: ClientsSelect<false> | ClientsSelect<true>;
+    quotations: QuotationsSelect<false> | QuotationsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -150,6 +158,36 @@ export interface UserAuthOperations {
     email: string;
     password: string;
   };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries".
+ */
+export interface Inquiry {
+  id: number;
+  name: string;
+  company?: string | null;
+  email: string;
+  phone: string;
+  service: 'web' | 'cad' | 'billing' | 'other';
+  description: string;
+  status?: ('new' | 'pending' | 'converted' | 'closed') | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects".
+ */
+export interface Project {
+  id: number;
+  projectName: string;
+  client: number | Inquiry;
+  progress?: number | null;
+  deadline?: string | null;
+  status?: ('progress' | 'completed') | null;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -401,15 +439,6 @@ export interface Category {
    */
   generateSlug?: boolean | null;
   slug: string;
-  parent?: (number | null) | Category;
-  breadcrumbs?:
-    | {
-        doc?: (number | null) | Category;
-        url?: string | null;
-        label?: string | null;
-        id?: string | null;
-      }[]
-    | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -774,6 +803,34 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients".
+ */
+export interface Client {
+  id: number;
+  clientName: string;
+  companyName?: string | null;
+  email?: string | null;
+  phone: string;
+  notes?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quotations".
+ */
+export interface Quotation {
+  id: number;
+  quotationNumber: string;
+  client: number | Client;
+  amount: number;
+  status?: ('draft' | 'sent' | 'approved' | 'rejected') | null;
+  documentFile?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -786,12 +843,12 @@ export interface Redirect {
     type?: ('reference' | 'custom') | null;
     reference?:
       | ({
-          relationTo: 'pages';
-          value: number | Page;
+          relationTo: 'inquiries';
+          value: number | Inquiry;
         } | null)
       | ({
-          relationTo: 'posts';
-          value: number | Post;
+          relationTo: 'projects';
+          value: number | Project;
         } | null);
     url?: string | null;
   };
@@ -826,8 +883,8 @@ export interface Search {
   title?: string | null;
   priority?: number | null;
   doc: {
-    relationTo: 'posts';
-    value: number | Post;
+    relationTo: 'projects';
+    value: number | Project;
   };
   slug?: string | null;
   meta?: {
@@ -963,6 +1020,14 @@ export interface PayloadLockedDocument {
   id: number;
   document?:
     | ({
+        relationTo: 'inquiries';
+        value: number | Inquiry;
+      } | null)
+    | ({
+        relationTo: 'projects';
+        value: number | Project;
+      } | null)
+    | ({
         relationTo: 'pages';
         value: number | Page;
       } | null)
@@ -981,6 +1046,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: number | User;
+      } | null)
+    | ({
+        relationTo: 'clients';
+        value: number | Client;
+      } | null)
+    | ({
+        relationTo: 'quotations';
+        value: number | Quotation;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1043,6 +1116,34 @@ export interface PayloadMigration {
   batch?: number | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "inquiries_select".
+ */
+export interface InquiriesSelect<T extends boolean = true> {
+  name?: T;
+  company?: T;
+  email?: T;
+  phone?: T;
+  service?: T;
+  description?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "projects_select".
+ */
+export interface ProjectsSelect<T extends boolean = true> {
+  projectName?: T;
+  client?: T;
+  progress?: T;
+  deadline?: T;
+  status?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1312,15 +1413,6 @@ export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
   generateSlug?: T;
   slug?: T;
-  parent?: T;
-  breadcrumbs?:
-    | T
-    | {
-        doc?: T;
-        url?: T;
-        label?: T;
-        id?: T;
-      };
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1346,6 +1438,32 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "clients_select".
+ */
+export interface ClientsSelect<T extends boolean = true> {
+  clientName?: T;
+  companyName?: T;
+  email?: T;
+  phone?: T;
+  notes?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "quotations_select".
+ */
+export interface QuotationsSelect<T extends boolean = true> {
+  quotationNumber?: T;
+  client?: T;
+  amount?: T;
+  status?: T;
+  documentFile?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
