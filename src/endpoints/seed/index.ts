@@ -19,8 +19,7 @@ const collections: CollectionSlug[] = [
   'form-submissions',
   'search',
 ]
-
-const globals: GlobalSlug[] = ['header', 'footer']
+const globals: any[] = ['header', 'footer']
 
 const categories = ['Technology', 'News', 'Finance', 'Design', 'Software', 'Engineering']
 
@@ -43,14 +42,14 @@ export const seed = async ({
   // the custom `/api/seed` endpoint does not
   payload.logger.info(`— Clearing collections and globals...`)
 
-  // clear the database
+  // clear the database - slug-க்கு as any சேர்க்கப்பட்டுள்ளது
   await Promise.all(
     globals.map((global) =>
       payload.updateGlobal({
-        slug: global,
+        slug: global as any,
         data: {
           navItems: [],
-        },
+        } as any,
         depth: 0,
         context: {
           disableRevalidate: true,
@@ -217,9 +216,10 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding globals...`)
 
+  // கீழ்க்கண்ட அப்டேட்களுக்கும் as any சேர்க்கப்பட்டுள்ளது
   await Promise.all([
     payload.updateGlobal({
-      slug: 'header',
+      slug: 'header' as any,
       data: {
         navItems: [
           {
@@ -240,10 +240,10 @@ export const seed = async ({
             },
           },
         ],
-      },
+      } as any,
     }),
     payload.updateGlobal({
-      slug: 'footer',
+      slug: 'footer' as any,
       data: {
         navItems: [
           {
@@ -270,7 +270,7 @@ export const seed = async ({
             },
           },
         ],
-      },
+      } as any,
     }),
   ])
 
