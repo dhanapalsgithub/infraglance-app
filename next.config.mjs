@@ -15,7 +15,14 @@ const getServerUrl = () => {
 const NEXT_PUBLIC_SERVER_URL = getServerUrl()
 
 const nextConfig = {
+  // Vercel-ல் sharp சரியாகச் செயல்பட இது மிக அவசியமானது
   serverExternalPackages: ['sharp', '@payloadcms/db-postgres'],
+
+  // Vercel பில்டில் sharp பைல்களை கட்டாயம் சேர்க்க வேண்டும்
+  outputFileTracingIncludes: {
+    '/admin/**/*': ['./node_modules/.pnpm/sharp*/**/*'],
+    '/**/*': ['./node_modules/.pnpm/sharp*/**/*'],
+  },
 
   sassOptions: {
     loadPaths: ['./node_modules/@payloadcms/ui/dist/scss/'],
