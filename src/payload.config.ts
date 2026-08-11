@@ -70,7 +70,7 @@ export default buildConfig({
     Settings, // புதிய Settings குளோபல் இங்கே சேர்க்கப்பட்டுள்ளது
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  
   plugins,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
