@@ -1,13 +1,15 @@
 'use client'
-import { Header } from '@/payload-types'
 import { RowLabelProps, useRowLabel } from '@payloadcms/ui'
 
 export const RowLabel: React.FC<RowLabelProps> = () => {
-  const data = useRowLabel<NonNullable<Header['navItems']>[number]>()
+  const { data, rowNumber } = useRowLabel<any>()
 
-  const label = data?.data?.link?.label
-    ? `Nav item ${data.rowNumber !== undefined ? data.rowNumber + 1 : ''}: ${data?.data?.link?.label}`
-    : 'Row'
+  // தரவுகளில் உள்ள தலைப்பு அல்லது ஃபீல்டை காட்டும் வகையில் மாற்றுதல்
+  const label = data?.title || data?.label || `Row ${(rowNumber ?? 0) + 1}`
 
-  return <div>{label}</div>
+  return (
+    <div>
+      {label}
+    </div>
+  )
 }
