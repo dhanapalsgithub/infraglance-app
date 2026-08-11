@@ -23,18 +23,21 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
 
     let redirectUrl: string
 
+    const relationTo = redirectItem.to?.reference?.relationTo as string
+
     if (typeof redirectItem.to?.reference?.value === 'string') {
-      const collection = redirectItem.to?.reference?.relationTo
+      const collection = relationTo
       const id = redirectItem.to?.reference?.value
 
       const document = (await getCachedDocument(collection, id)()) as Page | Post
-      redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
+      redirectUrl = `${relationTo !== 'pages' ? `/${relationTo}` : ''}/${
         document?.slug
       }`
     } else {
-      redirectUrl = `${redirectItem.to?.reference?.relationTo !== 'pages' ? `/${redirectItem.to?.reference?.relationTo}` : ''}/${
-        typeof redirectItem.to?.reference?.value === 'object'
-          ? redirectItem.to?.reference?.value?.slug
+      const targetValue = redirectItem.to?.reference?.value as any
+      redirectUrl = `${relationTo !== 'pages' ? `/${relationTo}` : ''}/${
+        typeof targetValue === 'object' && targetValue !== null
+          ? targetValue?.slug || targetValue?.id || ''
           : ''
       }`
     }
@@ -44,5 +47,5 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
 
   if (disableNotFound) return null
 
-  notFound()
+  notfound()
 }
