@@ -1,5 +1,5 @@
 import type React from 'react'
-import type { Page, Post } from '@/payload-types'
+import type { Config, Page, Post } from '@/payload-types'
 
 import { getCachedDocument } from '@/utilities/getDocument'
 import { getCachedRedirects } from '@/utilities/getRedirects'
@@ -26,7 +26,7 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
     const relationTo = redirectItem.to?.reference?.relationTo as string
 
     if (typeof redirectItem.to?.reference?.value === 'string') {
-      const collection = relationTo
+      const collection = relationTo as keyof Config['collections']
       const id = redirectItem.to?.reference?.value
 
       const document = (await getCachedDocument(collection, id)()) as Page | Post
@@ -47,5 +47,5 @@ export const PayloadRedirects: React.FC<Props> = async ({ disableNotFound, url }
 
   if (disableNotFound) return null
 
-  notfound()
+  notFound()
 }
