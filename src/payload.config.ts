@@ -60,10 +60,11 @@ export default buildConfig({
   editor: defaultLexical,
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || 'postgres://neondb_owner:npg_6WviBKYqMp2e@ep-solitary-frog-aybqjlyg-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+      connectionString:
+        process.env.DATABASE_URI ||
+        process.env.DATABASE_URL ||
+        'postgres://neondb_owner:npg_6WviBKYqMp2e@ep-solitary-frog-aybqjlyg-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
     },
-    // கிளவுட் டேட்டாபேஸில் அட்டவணைகளை தானாக உருவாக்க இது உதவும்
-    push: true,
   }),
   collections: [
     Inquiries, 
@@ -86,7 +87,7 @@ export default buildConfig({
   secret: process.env.PAYLOAD_SECRET || 'your-default-secret-key',
   sharp,
   typescript: {
-    outputFile: path.resolve(dirname, 'payload-types.ts'),
+    output: path.resolve(dirname, 'payload-types.ts'),
   },
   jobs: {
     access: {
