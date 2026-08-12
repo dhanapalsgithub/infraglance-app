@@ -59,13 +59,10 @@ export default buildConfig({
   },
   editor: defaultLexical,
   db: postgresAdapter({
-    pool: {
-      connectionString:
-        process.env.DATABASE_URI ||
-        process.env.DATABASE_URL ||
-        'postgres://neondb_owner:npg_6WviBKYqMp2e@ep-solitary-frog-aybqjlyg-pooler.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
-    },
-  }),
+  pool: {
+    connectionString: process.env.DATABASE_URI || process.env.DATABASE_URL || '',
+  },
+}),
   collections: [
     Inquiries, 
     Projects, 
